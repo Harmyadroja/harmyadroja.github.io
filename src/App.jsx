@@ -1,35 +1,74 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-scroll";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, Menu, X } from "lucide-react"; // <-- Added Menu, X
+
 
 const sections = ["Home", "Experience", "About", "Skills", "Projects", "Contact"];
 
 const App = () => {
   const [active, setActive] = useState("Home");
+  const [menuOpen, setMenuOpen] = useState(false); // <-- Menu toggle state
 
   return (
     <div className="bg-gray-950 text-white font-sans scroll-smooth">
       {/* Navbar */}
+
       <header className="fixed top-0 w-full bg-gray-900 shadow z-50">
         <nav className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
           <h1 className="text-xl font-bold text-cyan-400">Harmy.dev</h1>
-          <ul className="flex gap-6 text-sm">
+
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex gap-6 text-sm">
             {sections.map((sec) => (
               <li key={sec}>
                 <Link
                   to={sec.toLowerCase()}
                   smooth={true}
                   duration={500}
+                  spy={true}
+                  offset={-96} // offset for fixed header height
                   className={`cursor-pointer hover:text-cyan-400 transition ${active === sec ? "text-cyan-400" : ""}`}
                   onSetActive={() => setActive(sec)}
+                >
+
+                  {sec}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Hamburger icon for mobile */}
+          <button
+            className="md:hidden text-white"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </nav>
+
+        {/* Mobile Nav */}
+        {menuOpen && (
+          <ul className="md:hidden flex flex-col bg-gray-800 px-6 py-4 space-y-4 text-sm">
+            {sections.map((sec) => (
+              <li key={sec}>
+                <Link
+                  to={sec.toLowerCase()}
+                  smooth={true}
+                  duration={500}
+                  className={`block cursor-pointer hover:text-cyan-400 transition ${active === sec ? "text-cyan-400" : ""}`}
+                  onClick={() => {
+                    setActive(sec);
+                    setMenuOpen(false); // close menu on click
+                  }}
                 >
                   {sec}
                 </Link>
               </li>
             ))}
           </ul>
-        </nav>
+        )}
       </header>
 
       <main className="pt-24 space-y-24">
@@ -54,17 +93,17 @@ const App = () => {
               <h4 className="text-lg font-semibold">Complitech</h4>
               <p className="text-sm text-gray-400">Software Engineer • Jan 2024 - Nov 2024</p>
               <ul className="list-disc pl-5 text-gray-300 leading-relaxed text-justify">
-              <li className="text-gray-300 mt-2">Completed 6-month internship followed by 5-month full-time role in web development projects.</li>
-              <li className="text-gray-300">Gained hands-on experience with frontend technologies and backend integration.</li>
+                <li className="text-gray-300 mt-2">Completed 6-month internship followed by 5-month full-time role in web development projects.</li>
+                <li className="text-gray-300">Gained hands-on experience with frontend technologies and backend integration.</li>
               </ul>
             </div>
             <div className="bg-gray-800 p-4 rounded-xl">
               <h4 className="text-lg font-semibold">4ColorDesign.com</h4>
               <p className="text-sm text-gray-400">Software Engineer Intern • June 2023 - July 2023</p>
-              
+
               <ul className="list-disc pl-5 text-gray-300 leading-relaxed text-justify">
                 <li>
-                  Gained foundational experience in PHP programming and Linux server environments. Learned to work with command-line tools, 
+                  Gained foundational experience in PHP programming and Linux server environments. Learned to work with command-line tools,
                   troubleshoot application errors, and assist in daily IT operations and support tasks within a fast-paced development team.
                 </li>
               </ul>
